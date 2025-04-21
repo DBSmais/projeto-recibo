@@ -1,3 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">gerador de recibo 1.0</string>
+    <string name="app_name">Gerador de Recibos</string>
+    <string name="nome_pagador">Nome do Pagador</string>
+    <string name="cpf_pagador">CPF do Pagador</string>
+    <string name="nome_recebedor">Nome do Recebedor</string>
+    <string name="cpf_recebedor">CPF do Recebedor</string>
+    <string name="valor">Valor</string>
+    <string name="descricao">Descrição</string>
+    <string name="gerar_recibo">Gerar Recibo</string>
+    <string name="recibo_gerado">Recibo Gerado</string>
+    <string name="erro_cpf_invalido">CPF inválido</string>
+    <string name="erro_campo_vazio">Preencha todos os campos</string>
 </resources>

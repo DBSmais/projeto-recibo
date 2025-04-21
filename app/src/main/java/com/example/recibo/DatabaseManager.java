@@ -1,98 +1,107 @@
 package com.example.recibo;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.Cursor;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
-public class DatabaseManager {
-    private static final String URL = "jdbc:sqlite:recibos.db";
-    private Connection connection;
+public class DatabaseManager extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "recibos.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String TABLE_RECIBOS = "recibos";
+    
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_NOME_PAGADOR = "nome_pagador";
+    private static final String COLUMN_CPF_PAGADOR = "cpf_pagador";
+    private static final String COLUMN_NOME_RECEBEDOR = "nome_recebedor";
+    private static final String COLUMN_CPF_RECEBEDOR = "cpf_recebedor";
+    private static final String COLUMN_VALOR = "valor";
+    private static final String COLUMN_DESCRICAO = "descricao";
+    private static final String COLUMN_DATA = "data";
 
-    public DatabaseManager() {
-        try {
-            connection = DriverManager.getConnection(URL);
-            criarTabela();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public DatabaseManager(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private void criarTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS recibos (" +
-                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                     "nome_pagador TEXT NOT NULL," +
-                     "cpf_pagador TEXT NOT NULL," +
-                     "nome_recebedor TEXT NOT NULL," +
-                     "cpf_recebedor TEXT NOT NULL," +
-                     "valor REAL NOT NULL," +
-                     "descricao TEXT NOT NULL," +
-                     "data TEXT NOT NULL" +
-                     ");";
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createTable = "CREATE TABLE " + TABLE_RECIBOS + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NOME_PAGADOR + " TEXT NOT NULL, " +
+                COLUMN_CPF_PAGADOR + " TEXT NOT NULL, " +
+                COLUMN_NOME_RECEBEDOR + " TEXT NOT NULL, " +
+                COLUMN_CPF_RECEBEDOR + " TEXT NOT NULL, " +
+                COLUMN_VALOR + " REAL NOT NULL, " +
+                COLUMN_DESCRICAO + " TEXT NOT NULL, " +
+                COLUMN_DATA + " TEXT NOT NULL)";
+        db.execSQL(createTable);
+    }
 
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIBOS);
+        onCreate(db);
     }
 
     public void salvarRecibo(ReciboGenerator recibo) {
-        String sql = "INSERT INTO recibos (nome_pagador, cpf_pagador, nome_recebedor, " +
-                    "cpf_recebedor, valor, descricao, data) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, recibo.getNomePagador());
-            pstmt.setString(2, recibo.getCpfPagador());
-            pstmt.setString(3, recibo.getNomeRecebedor());
-            pstmt.setString(4, recibo.getCpfRecebedor());
-            pstmt.setDouble(5, recibo.getValor());
-            pstmt.setString(6, recibo.getDescricao());
-            pstmt.setString(7, new SimpleDateFormat("yyyy-MM-dd").format(recibo.getData()));
-            
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        String sql = "INSERT INTO " + TABLE_RECIBOS + " (" +
+                COLUMN_NOME_PAGADOR + ", " + COLUMN_CPF_PAGADOR + ", " +
+                COLUMN_NOME_RECEBEDOR + ", " + COLUMN_CPF_RECEBEDOR + ", " +
+                COLUMN_VALOR + ", " + COLUMN_DESCRICAO + ", " + COLUMN_DATA +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        db.execSQL(sql, new Object[]{
+                recibo.getNomePagador(),
+                recibo.getCpfPagador(),
+                recibo.getNomeRecebedor(),
+                recibo.getCpfRecebedor(),
+                recibo.getValor(),
+                recibo.getDescricao(),
+                sdf.format(recibo.getData())
+        });
+        
+        db.close();
     }
 
     public List<ReciboGenerator> listarRecibos() {
         List<ReciboGenerator> recibos = new ArrayList<>();
-        String sql = "SELECT * FROM recibos ORDER BY data DESC";
-
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            while (rs.next()) {
-                ReciboGenerator recibo = new ReciboGenerator(
-                    rs.getString("nome_pagador"),
-                    rs.getString("cpf_pagador"),
-                    rs.getString("nome_recebedor"),
-                    rs.getString("cpf_recebedor"),
-                    rs.getDouble("valor"),
-                    rs.getString("descricao")
-                );
-                recibo.setData(new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("data")));
-                recibos.add(recibo);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        SQLiteDatabase db = this.getReadableDatabase();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        String query = "SELECT * FROM " + TABLE_RECIBOS + " ORDER BY " + COLUMN_DATA + " DESC";
+        Cursor cursor = db.rawQuery(query, null);
+        
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+                    ReciboGenerator recibo = new ReciboGenerator(
+                            cursor.getString(1), // nome_pagador
+                            cursor.getString(2), // cpf_pagador
+                            cursor.getString(3), // nome_recebedor
+                            cursor.getString(4), // cpf_recebedor
+                            cursor.getDouble(5), // valor
+                            cursor.getString(6)  // descricao
+                    );
+                    recibo.setData(sdf.parse(cursor.getString(7))); // data
+                    recibos.add(recibo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while (cursor.moveToNext());
         }
-
+        
+        cursor.close();
+        db.close();
         return recibos;
     }
 
     public void fecharConexao() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.geradorderecibo10"
+    namespace = "com.example.recibo"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.geradorderecibo10"
+        applicationId = "com.example.recibo"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
