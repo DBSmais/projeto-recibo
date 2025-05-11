@@ -35,10 +35,4 @@ Aplicativo Android para geração e gerenciamento de recibos.
 - Android SDK
 - Gradle
 
-## Contribuição
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature
-3. Faça commit das alterações
-4. Faça push para a branch
-5. Abra um Pull Request 
+##Estou descontinuando meu trabalho desse projeto pois estou analisando outras linguagens
