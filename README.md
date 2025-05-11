@@ -35,4 +35,4 @@ Aplicativo Android para geração e gerenciamento de recibos.
 - Android SDK
 - Gradle
 
-##Estou descontinuando meu trabalho desse projeto pois estou analisando outras linguagens
+## Estou descontinuando meu trabalho desse projeto pois estou analisando outras linguagens
