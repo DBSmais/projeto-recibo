@@ -1,70 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editNomePagador"
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome do Pagador"
-            android:inputType="textPersonName" />
+            android:layout_marginBottom="16dp"
+            app:srcCompat="@drawable/ic_recibo" />
 
-        <EditText
-            android:id="@+id/editCpfPagador"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="CPF do Pagador"
-            android:inputType="number" />
+            android:layout_marginBottom="8dp"
+            android:hint="@string/nome_pagador">
 
-        <EditText
-            android:id="@+id/editNomeRecebedor"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editNomePagador"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome do Recebedor"
-            android:inputType="textPersonName" />
+            android:layout_marginBottom="8dp"
+            android:hint="@string/cpf_pagador">
 
-        <EditText
-            android:id="@+id/editCpfRecebedor"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editCpfPagador"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="CPF do Recebedor"
-            android:inputType="number" />
+            android:layout_marginBottom="8dp"
+            android:hint="@string/nome_recebedor">
 
-        <EditText
-            android:id="@+id/editValor"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editNomeRecebedor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Valor"
-            android:inputType="numberDecimal" />
+            android:layout_marginBottom="8dp"
+            android:hint="@string/cpf_recebedor">
 
-        <EditText
-            android:id="@+id/editDescricao"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editCpfRecebedor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Descrição"
-            android:inputType="textMultiLine" />
+            android:layout_marginBottom="8dp"
+            android:hint="@string/valor">
 
-        <Button
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editValor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/descricao">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGerarRecibo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gerar Recibo"
-            android:layout_marginTop="16dp" />
+            android:layout_marginBottom="16dp"
+            android:text="@string/gerar_recibo" />
 
         <TextView
             android:id="@+id/textRecibo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="14sp"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:textSize="12sp"
             android:fontFamily="monospace" />
 
     </LinearLayout>
-</ScrollView> 
+
+</ScrollView>
